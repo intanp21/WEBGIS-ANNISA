@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Peta Persebaran Pendidikan Di Kota Metro</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f6f9;
+    }
+
+    #map {
+      height: 100vh;
+      width: 100%;
+      border-radius: 0 0 15px 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .leaflet-popup-content-wrapper {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 14px;
+      color: #333;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .leaflet-popup-tip {
+      background: #fff;
+    }
+
+    .map-title {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 18px;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<div class="map-title">Peta Persebaran Pendidikan di Kota Metro</div>
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""></script>
+<script src="leaflet.ajax.min.js"></script>
+
+<script>
+  var map = L.map('map').setView([-5.1209974, 105.2658665], 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  function popUp(f, l) {
+    var out = [];
+    if (f.properties) {
+      for (var key in f.properties) {
+        out.push("<strong>" + key + "</strong>: " + f.properties[key]);
+      }
+      l.bindPopup(out.join("<br />"));
+    }
+  }
+
+  new L.GeoJSON.AJAX(["METRO.geojson"], { onEachFeature: popUp }).addTo(map);
+  new L.GeoJSON.AJAX(["PENDIDIKAN.geojson"], { onEachFeature: popUp }).addTo(map);
+</script>
+
+</body>
+</html>
